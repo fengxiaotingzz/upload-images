@@ -1,5 +1,7 @@
 import React, { useRef } from "react";
 
+import "./index.less";
+
 function Upload({
   children,
   multiple = true,
@@ -23,7 +25,7 @@ function Upload({
       o.status = "uploading";
 
       fetch(url, { body: files, method: "POST" })
-        .then((res, error) => {
+        .then((res) => {
           if (res.status === 200) return res.json();
 
           throw "error";
@@ -41,7 +43,7 @@ function Upload({
   };
 
   return (
-    <div>
+    <div className="upload-images-box">
       <div onClick={() => onClickInput()}>{children}</div>
       <input
         type="file"
@@ -49,6 +51,7 @@ function Upload({
         ref={inputRef}
         onChange={onChangeFile}
         value=""
+        className="input"
       />
     </div>
   );

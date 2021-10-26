@@ -8,7 +8,14 @@ module.exports = {
     filename: "[name]_[chunkhash:8].js",
   },
   module: {
-    rules: [{ test: /\.js$/, use: "babel-loader" }],
+    rules: [
+      { test: /\.js$/, use: "babel-loader" },
+      {
+        test: /\.less$/,
+        use: ["style-loader", "css-loader", "less-loader"],
+        include: /src\//,
+      },
+    ],
   },
   mode: "development",
   plugins: [
