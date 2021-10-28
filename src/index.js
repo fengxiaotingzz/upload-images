@@ -1,60 +1,13 @@
-import React, { useRef } from "react";
+const installObj = {
+  react: require("../node_modules/react"),
+};
 
-import "./index.less";
+const installKeys = Object.keys(installObj);
 
-function Upload({
-  children,
-  multiple = true,
-  url = "",
-  onCheck = () => {},
-  onChange = () => {},
-}) {
-  const inputRef = useRef();
+const hasInstall = installKeys.every((key) => installObj[key]);
 
-  const onClickInput = () => {
-    const ele = inputRef.current;
-    ele.click();
-  };
-
-  const onChangeFile = (e) => {
-    const list = e?.target?.files;
-    const files = Array.from(list);
-    if (!onCheck(files)) return false;
-
-    files.map((o) => {
-      o.status = "uploading";
-
-      fetch(url, { body: files, method: "POST" })
-        .then((res) => {
-          if (res.status === 200) return res.json();
-
-          throw "error";
-        })
-        .then((res) => {
-          o.res = res;
-          o.status = "success";
-        })
-        .catch(() => {
-          o.status = "error";
-        });
-    });
-
-    onChange(files);
-  };
-
-  return (
-    <div className="upload-images-box">
-      <div onClick={() => onClickInput()}>{children}</div>
-      <input
-        type="file"
-        multiple={multiple}
-        ref={inputRef}
-        onChange={onChangeFile}
-        value=""
-        className="input"
-      />
-    </div>
-  );
+if (!hasInstall) {
+  throw new Error("本插件依赖于:react，请安装之后再使用");
+} else {
+  module.exports = require("./upload/index.js");
 }
-
-export default Upload;
